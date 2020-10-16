@@ -1,27 +1,49 @@
+import CharacterList from "@/components/CharacterList";
+import ComicList from "@/components/ComicList";
+import NotFoundPage from "@/components/NotFoundPage";
+import ViewCharacter from "@/components/ViewCharacter";
+import ViewComic from '@/components/ViewComic';
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "../views/Home.vue";
+import RouteName from "./route-name";
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    name: "Home",
-    component: Home
+    name: RouteName.Home,
+    redirect: "characters"
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
+    path: "/characters",
+    name: RouteName.CharacterList,
+    component: CharacterList
+  },
+  {
+    path: "/characters/:characterId",
+    name: RouteName.ViewCharacter,
+    component: ViewCharacter
+  },
+  {
+    path: "/comics",
+    name: RouteName.ComicList,
+    component: ComicList
+  },
+  {
+    path: "/comics/:comicId",
+    name: RouteName.ViewComic,
+    component: ViewComic
+  },
+  {
+    path: "*",
+    name: RouteName.NotFound,
+    component: NotFoundPage
   }
 ];
 
 const router = new VueRouter({
+  mode: "history",
   routes
 });
 
