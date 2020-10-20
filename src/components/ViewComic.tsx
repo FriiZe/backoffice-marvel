@@ -2,6 +2,8 @@ import Comic, { Price } from '@/models/comics';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { VNode } from 'vue';
 import AppLoadingMixin from '@/mixins/AppLoadingMixin';
+import { ModelRelation } from '@/models/models-types';
+import RouteName from '@/router/route-name';
 
 @Component
 export default class ViewComic extends AppLoadingMixin {
@@ -9,6 +11,11 @@ export default class ViewComic extends AppLoadingMixin {
   get comic(): Comic | null{
     if (!this.comicId) {return null;}
     return Comic.query().whereId(+this.comicId).first()
+  }
+
+  public characterId(url: string): string {
+    const id = url.split('http://gateway.marvel.com/v1/public/characters/')
+    return id[1]
   }
 
   get comicId(): string | null{
@@ -52,6 +59,23 @@ export default class ViewComic extends AppLoadingMixin {
           src={this.comic?.thumbnail.path+'.'+this.comic?.thumbnail.extension}
           alt={`image ${this.comic.title}`}
         />
+        <h2>Les personnages de ce super comic ({this.comic.characters.returned})</h2>
+        <ul>
+          {this.comic.characters.items.map((character: ModelRelation) => (
+            <li>
+              {character.name} 
+              <button
+                onClick={() => {
+                   this.$router.push({ 
+                    name: RouteName.ViewCharacter,
+                    params: { characterId: this.characterId(character.resourceURI) } 
+                  })
+                }}>
+                Voir le personnage
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     )
   }

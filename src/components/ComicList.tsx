@@ -32,7 +32,7 @@ export default class ComicList extends AppLoadingMixin {
       <div class="font-weight-bold">{comic.title}</div>
       <button
         onClick={() => this.redirectComic(comic.id)}
-      >Voir plus</button>
+      >Voir encore plus</button>
       </div>
     ))
   }

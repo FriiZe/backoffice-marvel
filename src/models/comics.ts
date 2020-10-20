@@ -1,11 +1,13 @@
 import { Attr } from "@vuex-orm/core";
 import Model, { ModelFields } from "./model";
+import { ModelsRelation } from './models-types';
 
 export interface ComicFields extends ModelFields {
   title: string;
   description: string;
   thumbnail: Thumbnail;
   prices: Price[];
+  characters: ModelsRelation;
 }
 
 export interface ApiResponse<T> {
@@ -28,6 +30,7 @@ export default class Comic extends Model implements ComicFields {
   public description!: string;
   public thumbnail!: Thumbnail;
   public prices!: Price[];
+  public characters!: ModelsRelation;
 
   static fields(): Record<keyof ComicFields, Attr> {
     return {
@@ -35,7 +38,8 @@ export default class Comic extends Model implements ComicFields {
       title: this.attr(""),
       description: this.attr(""),
       thumbnail: this.attr(""),
-      prices: this.attr("")
+      prices: this.attr(""),
+      characters: this.attr("")
     };
   }
 }

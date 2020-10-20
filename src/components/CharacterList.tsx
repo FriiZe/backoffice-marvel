@@ -44,6 +44,7 @@ export default class CharacterList extends AppLoadingMixin {
     this.totalPages = Math.ceil(total/10);
     this.charactersId = entity.map((character: Character) => (character.id));
     this.charactersList = Character.query().whereIdIn(this.charactersId).orderBy('name').all();
+    console.log(this.charactersList)
   }
 
   public renderPage(): VNode{
