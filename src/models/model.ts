@@ -29,19 +29,47 @@ export default class Model extends VueXORMModel implements ModelFields {
 
   static async fetchAll<T extends Model>(
     this: ModelClass<T>,
-    pageNumber: number
+    pageNumber: number,
+    name?: string
     // query?: Record<string, any>,
   ): Promise<ApiResponse<T>> {
-    const res = await this.api().get(
-      `${apiConnection.url}${this.entity}?apikey=${
-        apiConnection.publicKey
-      }&limit=10&offset=${(pageNumber - 1) * 10}`,
-      {
-        dataTransformer: res => {
-          return res.data.data.results;
+    let res;
+    if(name != undefined && this.entity == 'characters'){
+      res = await this.api().get(
+        `${apiConnection.url}${this.entity}?nameStartsWith=${name}&apikey=${
+          apiConnection.publicKey
+        }&limit=10&offset=${(pageNumber - 1) * 10}`,
+        {
+          dataTransformer: res => {
+            return res.data.data.results;
+          }
         }
-      }
-    );
+      );
+    }
+    else if(name != undefined && this.entity == 'comics'){
+      res = await this.api().get(
+        `${apiConnection.url}${this.entity}?titleStartsWith=${name}&apikey=${
+          apiConnection.publicKey
+        }&limit=10&offset=${(pageNumber - 1) * 10}`,
+        {
+          dataTransformer: res => {
+            return res.data.data.results;
+          }
+        }
+      );
+    }
+    else{
+      res = await this.api().get(
+        `${apiConnection.url}${this.entity}?apikey=${
+          apiConnection.publicKey
+        }&limit=10&offset=${(pageNumber - 1) * 10}`,
+        {
+          dataTransformer: res => {
+            return res.data.data.results;
+          }
+        }
+      );
+    }
     if (!res.entities) {
       throw new Error("No entities returned");
     }

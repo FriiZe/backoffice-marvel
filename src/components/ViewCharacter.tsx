@@ -15,7 +15,6 @@ export default class ViewCharacter extends AppLoadingMixin {
 
   public comicId(url: string): any {
     const id = url.split('http://gateway.marvel.com/v1/public/comics/')
-    console.log(id)
     return id[1]
   }
 
@@ -51,7 +50,7 @@ export default class ViewCharacter extends AppLoadingMixin {
           src={this.character?.thumbnail.path+'.'+this.character?.thumbnail.extension}
           alt={`image ${this.character.name}`}
         />
-        <h2>Les comics de ce super personnage ({this.character.comics.returned})</h2>
+        <h2>Appears in following comics ({this.character.comics.returned}):</h2>
         <ul>
           {this.character.comics.items.map((comic: ModelRelation) => (
             <li>
@@ -63,7 +62,7 @@ export default class ViewCharacter extends AppLoadingMixin {
                     params: { comicId: this.comicId(comic.resourceURI) } 
                   })
                 }}>
-                Voir le comic 
+                See comic 
               </button>
             </li>
           ))}

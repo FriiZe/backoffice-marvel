@@ -10,7 +10,7 @@ export default class AppLoadingMixin extends Vue {
   public renderLoading(): VNode {
     return (
       <div class="text-center" p-5>
-        <h1>Chargement en cours ...</h1>
+        <h1>Loading ...</h1>
       </div>
     );
   }

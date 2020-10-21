@@ -26,13 +26,20 @@ export default class ComicList extends AppLoadingMixin {
 
   public comicsId: string[] = [];
 
+  public searchComics!: string;
+
   private renderComics() {
     return this.comicsList.map((comic) =>  (
       <div>
-      <div class="font-weight-bold">{comic.title}</div>
-      <button
-        onClick={() => this.redirectComic(comic.id)}
-      >Voir encore plus</button>
+        <div class="font-weight-bold showcase">
+          <button
+            onClick={() => this.redirectComic(comic.id)}
+            class="showDetails"
+          >
+            See more
+          </button >
+          {comic.title}
+        </div>
       </div>
     ))
   }
@@ -41,8 +48,8 @@ export default class ComicList extends AppLoadingMixin {
     this.$router.push({name: RouteName.ViewComic, params: { comicId }});
   }
 
-  public async loadData(): Promise<void> {
-    const {total, entity} = await Comic.fetchAll(this.currentPage);
+  public async loadData(title?: string): Promise<void> {
+    const {total, entity} = await Comic.fetchAll(this.currentPage, title);
     this.totalPages = Math.ceil(total/10);
     this.comicsId = entity.map((comic: Comic) => (comic.id));
     this.comicsList = Comic.query().whereIdIn(this.comicsId).orderBy('title').all();
@@ -52,13 +59,18 @@ export default class ComicList extends AppLoadingMixin {
     return (
       <div>
         <h1>Comics</h1>
+        <input v-model={this.searchComics} placeholder="Enter a comic's name"/>
+        <button type="submit"
+          onclick={()=>
+            this.loadData(this.searchComics)}
+        >Search</button>
         {this.renderComics()} 
         <paginate
           pageCount={this.totalPages}
           clickHandler={(value: number) => { this.currentPage = value}}
           prevText='Prev'
           nextText='Next'
-          containerClass="'className'"
+          containerClass="paging"
           v-model={this.currentPage}>
         </paginate>
       </div>

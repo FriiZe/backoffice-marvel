@@ -26,38 +26,47 @@ export default class CharacterList extends AppLoadingMixin {
 
   public charactersId: string[] = [];
 
+  public searchCharacters!: string;
+
   private renderCharacters() {
     return this.charactersList.map((character) =>  (
       <div>
-      <div class="font-weight-bold">{character.name}</div>
-      <button
-        onClick={() => {
-          this.$router.push({name: RouteName.ViewCharacter, params: { characterId: character.id}});
-        }}
-      >Voir plus</button>
+        <div class="font-weight-bold showcase">
+          <button
+            onClick={() => {
+              this.$router.push({name: RouteName.ViewCharacter, params: { characterId: character.id}});
+            }}
+            class="showDetails"
+          >See more</button>
+          {character.name}
+        </div>
       </div>
     ))
   }
 
-  public async loadData(): Promise<void> {
-    const {total, entity} = await Character.fetchAll(this.currentPage);
+  public async loadData(name?: string): Promise<void> {
+    const {total, entity} = await Character.fetchAll(this.currentPage, name);
     this.totalPages = Math.ceil(total/10);
     this.charactersId = entity.map((character: Character) => (character.id));
     this.charactersList = Character.query().whereIdIn(this.charactersId).orderBy('name').all();
-    console.log(this.charactersList)
   }
 
   public renderPage(): VNode{
     return (
       <div>
         <h1>Characters</h1>
-        {this.renderCharacters()} 
+        <input v-model={this.searchCharacters} placeholder="Enter a character's name"/>
+        <button type="submit"
+          onclick={()=>
+            this.loadData(this.searchCharacters)}
+        >Search</button>
+        {this.renderCharacters()}
         <paginate
           pageCount={this.totalPages}
           clickHandler={(value: number) => { this.currentPage = value}}
           prevText='Prev'
           nextText='Next'
-          containerClass="'className'"
+          containerClass="paging"
           v-model={this.currentPage}>
         </paginate>
       </div>

@@ -52,14 +52,14 @@ export default class ViewComic extends AppLoadingMixin {
     return (
       <div>
         <h1>{this.comic?.title}</h1>
-        <h2>Prix</h2>
+        <h2>Price</h2>
         {this.renderPrices()}
         <h3>{this.comic?.description}</h3>
         <img 
           src={this.comic?.thumbnail.path+'.'+this.comic?.thumbnail.extension}
           alt={`image ${this.comic.title}`}
         />
-        <h2>Les personnages de ce super comic ({this.comic.characters.returned})</h2>
+        <h2>Characters ({this.comic.characters.returned}):</h2>
         <ul>
           {this.comic.characters.items.map((character: ModelRelation) => (
             <li>
@@ -71,7 +71,7 @@ export default class ViewComic extends AppLoadingMixin {
                     params: { characterId: this.characterId(character.resourceURI) } 
                   })
                 }}>
-                Voir le personnage
+                See character
               </button>
             </li>
           ))}
