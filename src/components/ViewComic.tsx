@@ -7,6 +7,8 @@ import RouteName from '@/router/route-name';
 
 @Component
 export default class ViewComic extends AppLoadingMixin {
+  @Prop()
+  readonly comicId!: string;
 
   get comic(): Comic | null{
     if (!this.comicId) {return null;}
@@ -18,9 +20,9 @@ export default class ViewComic extends AppLoadingMixin {
     return id[1]
   }
 
-  get comicId(): string | null{
-    return this.$route.params.comicId ?? null;
-  }
+  // get comicId(): string | null{
+  //   return this.$route.params.comicId ?? null;
+  // }
 
   public async mounted() {
     this.isLoading = true;

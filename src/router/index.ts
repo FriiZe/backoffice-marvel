@@ -2,7 +2,7 @@ import CharacterList from "@/components/CharacterList";
 import ComicList from "@/components/ComicList";
 import NotFoundPage from "@/components/NotFoundPage";
 import ViewCharacter from "@/components/ViewCharacter";
-import ViewComic from '@/components/ViewComic';
+import ViewComic from "@/components/ViewComic";
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import RouteName from "./route-name";
@@ -23,7 +23,10 @@ const routes: Array<RouteConfig> = [
   {
     path: "/characters/:characterId",
     name: RouteName.ViewCharacter,
-    component: ViewCharacter
+    component: ViewCharacter,
+    props: route => ({
+      characterId: route.params.characterId
+    })
   },
   {
     path: "/comics",
@@ -33,7 +36,10 @@ const routes: Array<RouteConfig> = [
   {
     path: "/comics/:comicId",
     name: RouteName.ViewComic,
-    component: ViewComic
+    component: ViewComic,
+    props: route => ({
+      comicId: route.params.comicId
+    })
   },
   {
     path: "*",

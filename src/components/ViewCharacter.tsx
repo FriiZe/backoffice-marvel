@@ -8,6 +8,9 @@ import { ModelRelation } from '@/models/models-types';
 @Component
 export default class ViewCharacter extends AppLoadingMixin {
 
+  @Prop()
+  readonly characterId!: string;
+
   get character(): Character | null{
     if (!this.characterId) {return null;}
     return Character.query().whereId(+this.characterId).first()
@@ -18,9 +21,9 @@ export default class ViewCharacter extends AppLoadingMixin {
     return id[1]
   }
 
-  get characterId(): string | null{
-    return this.$route.params.characterId ?? null;
-  }
+  // get characterId(): string | null{
+  //   return this.$route.params.characterId ?? null;
+  // }
 
   public async mounted() {
     this.isLoading = true;
