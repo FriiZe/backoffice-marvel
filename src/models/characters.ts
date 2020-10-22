@@ -21,7 +21,7 @@ export default class Character extends Model implements CharacterFields {
   public thumbnail!: Thumbnail;
   public comics!: ModelsRelation;
 
-  static searchField = "title"
+  static searchField = "title";
 
   static fields(): Record<keyof CharacterFields, Attr> {
     return {

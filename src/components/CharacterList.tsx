@@ -1,5 +1,5 @@
 
-import AppLoadingMixin from '@/mixins/AppLoadingMixin';
+import AppLoadingErrorMixin from '@/mixins/AppLoadingErrorMixin';
 import Character from '@/models/characters';
 import RouteName from '@/router/route-name';
 import { VNode } from 'vue';
@@ -9,7 +9,7 @@ import Paginate from 'vuejs-paginate'
 Vue.component('paginate', Paginate)
 
 @Component
-export default class CharacterList extends AppLoadingMixin {
+export default class CharacterList extends AppLoadingErrorMixin {
 
   @Watch('currentPage', {immediate: true})
    async onPageChange(): Promise<void>{
@@ -29,14 +29,24 @@ export default class CharacterList extends AppLoadingMixin {
   public searchCharacters!: string;
 
   private renderCharacters() {
+    if (!this.charactersList?.length){
+      return (
+        <div class="text-center" p-5>
+          <h1>No results found</h1>
+          <button onClick={() => {
+            this.$router.push({ name: RouteName.CharacterList })
+          }}>Previous</button>
+        </div>
+      )
+    }
     return this.charactersList.map((character) =>  (
       <div>
         <div class="font-weight-bold showcase">
           <button
+            class="showDetails"
             onClick={() => {
               this.$router.push({name: RouteName.ViewCharacter, params: { characterId: character.id}});
             }}
-            class="showDetails"
           >See more</button>
           {character.name}
         </div>
@@ -48,6 +58,10 @@ export default class CharacterList extends AppLoadingMixin {
     try{
       const {total, entity} = await Character.fetchAll(this.currentPage, name);
       this.totalPages = Math.ceil(total/10);
+      if (!total && !entity) {
+        this.charactersList = []
+        return;
+      }
       this.charactersId = entity.map((character: Character) => (character.id));
       this.charactersList = Character.query().whereIdIn(this.charactersId).orderBy('name').all();
     } catch (err) {
@@ -65,14 +79,16 @@ export default class CharacterList extends AppLoadingMixin {
             this.loadData(this.searchCharacters)}
         >Search</button>
         {this.renderCharacters()}
-        <paginate
-          pageCount={this.totalPages}
-          clickHandler={(value: number) => { this.currentPage = value}}
-          prevText='Prev'
-          nextText='Next'
-          containerClass="paging"
-          v-model={this.currentPage}>
-        </paginate>
+        {this.charactersList.length ?
+          <paginate
+            pageCount={this.totalPages}
+            clickHandler={(value: number) => { this.currentPage = value}}
+            prevText='Prev'
+            nextText='Next'
+            containerClass="paging"
+            v-model={this.currentPage}>
+          </paginate>
+        : null }
       </div>
     )
   }

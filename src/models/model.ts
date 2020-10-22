@@ -49,6 +49,9 @@ export default class Model extends VueXORMModel implements ModelFields {
       }
     );
     if (!res.entities) {
+      if (name) {
+        return { entity: [], total: 0 };
+      }
       throw new Error("No entities returned");
     }
     return (

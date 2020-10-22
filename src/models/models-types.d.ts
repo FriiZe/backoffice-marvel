@@ -15,7 +15,4 @@ export interface Thumbnail {
   extension: string;
 }
 
-export enum searchField {
-  comics = "title",
-  characters = "name"
-}
+

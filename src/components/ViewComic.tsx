@@ -1,7 +1,7 @@
 import Comic, { Price } from '@/models/comics';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { VNode } from 'vue';
-import AppLoadingMixin from '@/mixins/AppLoadingMixin';
+import AppLoadingMixin from '@/mixins/AppLoadingErrorMixin';
 import { ModelRelation } from '@/models/models-types';
 import RouteName from '@/router/route-name';
 

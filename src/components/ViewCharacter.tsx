@@ -1,7 +1,7 @@
 import Character from '@/models/characters';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { VNode } from 'vue';
-import AppLoadingMixin from '@/mixins/AppLoadingMixin';
+import AppLoadingMixin from '@/mixins/AppLoadingErrorMixin';
 import RouteName from '@/router/route-name';
 import { ModelRelation } from '@/models/models-types';
 
