@@ -1,7 +1,7 @@
 import { Attr } from "@vuex-orm/core";
 
 import Model, { ModelFields } from "./model";
-import { ModelsRelation } from "./models-types";
+import { ModelsRelation, Thumbnail } from "./models-types";
 
 export interface CharacterFields extends ModelFields {
   name: string;
@@ -15,16 +15,13 @@ export interface ApiResponse<T> {
   total: number;
 }
 
-export interface Thumbnail {
-  path: string;
-  extension: string;
-}
-
 export default class Character extends Model implements CharacterFields {
   public name!: string;
   public description!: string;
   public thumbnail!: Thumbnail;
   public comics!: ModelsRelation;
+
+  static searchField = "title"
 
   static fields(): Record<keyof CharacterFields, Attr> {
     return {

@@ -55,5 +55,6 @@
   padding: 8px;
   border-radius: 8px;
   border: none;
+  margin-left: 8px;
 }
 </style>

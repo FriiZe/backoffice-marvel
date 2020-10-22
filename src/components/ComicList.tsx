@@ -49,10 +49,14 @@ export default class ComicList extends AppLoadingMixin {
   }
 
   public async loadData(title?: string): Promise<void> {
-    const {total, entity} = await Comic.fetchAll(this.currentPage, title);
-    this.totalPages = Math.ceil(total/10);
-    this.comicsId = entity.map((comic: Comic) => (comic.id));
-    this.comicsList = Comic.query().whereIdIn(this.comicsId).orderBy('title').all();
+    try {
+      const {total, entity} = await Comic.fetchAll(this.currentPage, title);
+      this.totalPages = Math.ceil(total/10);
+      this.comicsId = entity.map((comic: Comic) => (comic.id));
+      this.comicsList = Comic.query().whereIdIn(this.comicsId).orderBy('title').all();
+    } catch (err) {
+      this.isError = true;
+    }
   }
 
   public renderPage(): VNode{
@@ -62,7 +66,8 @@ export default class ComicList extends AppLoadingMixin {
         <input v-model={this.searchComics} placeholder="Enter a comic's name"/>
         <button type="submit"
           onclick={()=>
-            this.loadData(this.searchComics)}
+            this.loadData(this.searchComics)
+          }
         >Search</button>
         {this.renderComics()} 
         <paginate
@@ -79,6 +84,7 @@ export default class ComicList extends AppLoadingMixin {
 
   public async  created(): Promise<void> {
     this.isLoading = true;
+    this.isError = false;
     await this.loadData();
     this.isLoading = false;
   }

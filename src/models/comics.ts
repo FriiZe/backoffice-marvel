@@ -1,6 +1,6 @@
 import { Attr } from "@vuex-orm/core";
 import Model, { ModelFields } from "./model";
-import { ModelsRelation } from './models-types';
+import { ModelsRelation } from "./models-types";
 
 export interface ComicFields extends ModelFields {
   title: string;

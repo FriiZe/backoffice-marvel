@@ -60,11 +60,12 @@ export default class ViewComic extends AppLoadingMixin {
           alt={`image ${this.comic.title}`}
         />
         <h2>Characters ({this.comic.characters.returned}):</h2>
-        <ul>
+        <ul class="font-weight-bold showcase">
           {this.comic.characters.items.map((character: ModelRelation) => (
             <li>
               {character.name} 
               <button
+                class="showDetails"
                 onClick={() => {
                    this.$router.push({ 
                     name: RouteName.ViewCharacter,

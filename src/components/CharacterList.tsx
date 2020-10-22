@@ -45,10 +45,14 @@ export default class CharacterList extends AppLoadingMixin {
   }
 
   public async loadData(name?: string): Promise<void> {
-    const {total, entity} = await Character.fetchAll(this.currentPage, name);
-    this.totalPages = Math.ceil(total/10);
-    this.charactersId = entity.map((character: Character) => (character.id));
-    this.charactersList = Character.query().whereIdIn(this.charactersId).orderBy('name').all();
+    try{
+      const {total, entity} = await Character.fetchAll(this.currentPage, name);
+      this.totalPages = Math.ceil(total/10);
+      this.charactersId = entity.map((character: Character) => (character.id));
+      this.charactersList = Character.query().whereIdIn(this.charactersId).orderBy('name').all();
+    } catch (err) {
+      this.isError = true
+    }
   }
 
   public renderPage(): VNode{
@@ -75,6 +79,7 @@ export default class CharacterList extends AppLoadingMixin {
 
   public async  created(): Promise<void> {
     this.isLoading = true;
+    this.isError = false;
     await this.loadData();
     this.isLoading = false;
   }

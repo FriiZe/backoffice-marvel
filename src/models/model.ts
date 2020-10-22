@@ -3,6 +3,11 @@ import { Request } from "@vuex-orm/plugin-axios";
 
 import apiConnection from "@/config/apiConnection.json";
 
+export enum searchField {
+  comics = "title",
+  characters = "name"
+}
+
 export interface ApiResponse<T> {
   entity: T[];
   total: number;
@@ -31,45 +36,18 @@ export default class Model extends VueXORMModel implements ModelFields {
     this: ModelClass<T>,
     pageNumber: number,
     name?: string
-    // query?: Record<string, any>,
   ): Promise<ApiResponse<T>> {
-    let res;
-    if(name != undefined && this.entity == 'characters'){
-      res = await this.api().get(
-        `${apiConnection.url}${this.entity}?nameStartsWith=${name}&apikey=${
-          apiConnection.publicKey
-        }&limit=10&offset=${(pageNumber - 1) * 10}`,
-        {
-          dataTransformer: res => {
-            return res.data.data.results;
-          }
+    const res = await this.api().get(
+      `${apiConnection.url}${this.entity}?${
+        name ? `${searchField[this.entity]}StartsWith=${name}&` : ""
+      }apikey=${apiConnection.publicKey}&limit=10&offset=${(pageNumber - 1) *
+        10}`,
+      {
+        dataTransformer: res => {
+          return res.data.data.results;
         }
-      );
-    }
-    else if(name != undefined && this.entity == 'comics'){
-      res = await this.api().get(
-        `${apiConnection.url}${this.entity}?titleStartsWith=${name}&apikey=${
-          apiConnection.publicKey
-        }&limit=10&offset=${(pageNumber - 1) * 10}`,
-        {
-          dataTransformer: res => {
-            return res.data.data.results;
-          }
-        }
-      );
-    }
-    else{
-      res = await this.api().get(
-        `${apiConnection.url}${this.entity}?apikey=${
-          apiConnection.publicKey
-        }&limit=10&offset=${(pageNumber - 1) * 10}`,
-        {
-          dataTransformer: res => {
-            return res.data.data.results;
-          }
-        }
-      );
-    }
+      }
+    );
     if (!res.entities) {
       throw new Error("No entities returned");
     }
